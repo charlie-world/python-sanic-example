@@ -1,7 +1,6 @@
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from time import sleep
-
+import time
 from sanic.blueprints import Blueprint
 from sanic.request import Request
 from sanic.response import json
@@ -18,7 +17,14 @@ async def hello(request: Request):
 
 @app.get('/blocking-job')
 async def blocking_job(request: Request):
-    sleep(5)
+    start_time = time.time()
+    file = open('test.txt', 'w')
+
+    while time.time() - start_time < 30.0:
+        file.write('Blocking job is going on....\n')
+        time.sleep(1)
+
+    file.close()
     return json({'msg': 'blocking job was completed'})
 
 
@@ -28,7 +34,14 @@ async def blocking_job_with_thread_pool(request: Request):
         loop = asyncio.get_event_loop()
 
         def task():
-            sleep(5)
+            start_time = time.time()
+            file = open('test.txt', 'w')
+
+            while time.time() - start_time < 30.0:
+                file.write('Blocking job is going on....\n')
+                time.sleep(1)
+
+            file.close()
             return json({'msg': 'blocking job with thread pool was completed'})
 
         return await loop.run_in_executor(pool, task)
