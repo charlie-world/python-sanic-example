@@ -11,7 +11,7 @@ pytest = "==4.6.3"
 pytest-cov = "==2.7.1"
 
 [packages]
-sanic = "==19.6.2"
+sanic = "==20.12.7"
 sentry-sdk = "==0.10.2"
 
 [requires]
